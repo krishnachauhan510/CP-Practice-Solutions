@@ -37,7 +37,7 @@ int main()
         ll l, r;
         cin >> l >> r;
 
-        ll ans = cnt3(l) + pre[r] - pre[l - 1];
+        ll ans = 2*cnt3(l) + pre[r] - pre[l];
 
         cout << ans << '\n';
     }

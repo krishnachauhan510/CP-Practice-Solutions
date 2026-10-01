@@ -3,30 +3,6 @@ using namespace std;
 
 #define ll long long
 
-bool rec(ll ind, ll sum, const vector<ll>& a, vector<vector<ll>>& dp)
-{
-    if (ind == a.size())
-    {
-        return sum % 9 == 0;
-    }
-
-    sum %= 9;
-
-    if (dp[ind][sum] != -1)
-    {
-        return dp[ind][sum];
-    }
-
-    // Pick
-    ll newSum = (sum - a[ind] + a[ind] * a[ind]) % 9;
-    bool pick = rec(ind + 1, newSum, a, dp);
-
-    // Not pick
-    bool not_pick = rec(ind + 1, sum, a, dp);
-
-    return dp[ind][sum] = pick || not_pick;
-}
-
 int main()
 {
     ll t;
@@ -38,7 +14,7 @@ int main()
         cin >> x;
 
         ll sum = 0;
-        vector<ll> a;
+        vector<ll> a2, a3;
 
         for (ll i = 0; i < x.size(); i++)
         {
@@ -46,24 +22,46 @@ int main()
 
             sum += digit;
 
-            if (digit == 2 || digit == 3)
+            if (digit == 2)
             {
-                a.push_back(digit);
+                a2.push_back(digit);
+            }
+            else if (digit == 3)
+            {
+                a3.push_back(digit);
             }
         }
 
-     
-        vector<vector<ll>> dp(a.size(), vector<ll>(9, -1));
-
-        bool ans = rec(0, sum % 9, a, dp);
-
-        if (ans)
+        if (sum % 9 == 0)
         {
-            cout << "YES\n";
+            cout << "YES" << endl;
+            continue;
         }
-        else
+
+        bool found = false;
+
+        for (ll i = 0; i <= a2.size(); i++)
         {
-            cout << "NO\n";
+            for (ll j = 0; j <= a3.size(); j++)
+            {
+                
+                ll val = 2 * i + 6 * j;
+
+                if ((sum + val) % 9 == 0)
+                {
+                    cout << "YES" << endl;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found)
+                break;
+        }
+
+        if (!found)
+        {
+            cout << "NO" << endl;
         }
     }
 

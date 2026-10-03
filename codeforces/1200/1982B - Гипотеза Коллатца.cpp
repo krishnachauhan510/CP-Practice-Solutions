@@ -39,21 +39,22 @@ int main()
 
             if (x < y)
             {
-                if (x + k < y)
-                {
-                    x += k;
-                    k = 0;
-                }
-                else
-                {
-                    k -= (y - x);
-                    x = 1;
-                    k %= (y - 1);
-                    x += k;
-                    k = 0;
-                }
-
                 break;
+            }
+        }
+
+        if (k > 0)
+        {
+            if (x + k < y)
+            {
+                x += k;
+            }
+            else
+            {
+                k -= (y - x);
+                x = 1;
+                k %= (y - 1);
+                x += k;
             }
         }
 

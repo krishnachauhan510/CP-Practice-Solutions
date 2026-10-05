@@ -8,37 +8,40 @@ void solve()
     int n;
     cin >> n;
 
-    vector<ll> a(n);
+    vector<ll> dp(n + 1, 0);
 
-    for (auto &x : a)
-        cin >> x;
-
-    set<ll> st;
-    st.insert(0);
+    // prefix sum -> latest index
+    map<ll, int> mp;
 
     ll sum = 0;
-    int ans = 0;
 
-    for (int i = 0; i < n; i++)
+    // prefix sum 0 occurs at index 0
+    mp[0] = 0;
+
+    for (int i = 1; i <= n; i++)
     {
-        sum += a[i];
+        ll x;
+        cin >> x;
 
-        if (st.count(sum))
+        sum += x;
+
+        // Don't take any segment ending at i
+        dp[i] = dp[i - 1];
+
+        // If same prefix sum existed before,
+        // then (previous_index + 1 ... i) has sum 0
+        if (mp.find(sum) != mp.end())
         {
-            ans++;
+            int j = mp[sum];
 
-            st.clear();
-            st.insert(0);
+            dp[i] = max(dp[i], dp[j] + 1);
+        }
 
-            sum = 0;
-        }
-        else
-        {
-            st.insert(sum);
-        }
+        // Store latest occurrence
+        mp[sum] = i;
     }
 
-    cout << ans << '\n';
+    cout << dp[n] << '\n';
 }
 
 int main()

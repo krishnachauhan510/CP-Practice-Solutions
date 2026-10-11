@@ -1,69 +1,68 @@
-
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 #define ll long long
-#define N 200020
 
-ll T,n,k,a[N];
+multiset<ll> s;
+ll k;
 
-bool check(ll m)
-{
-    priority_queue<ll> q;
+bool check(ll t) {
+    ll used = 0;
+    multiset<ll> e = s;
 
-    for(ll i=1;i<=n;i++) q.push(a[i]);
+    while (!e.empty()) {
+        ll x = *e.rbegin();
 
-    ll tot=k+n+2*m,cnt=0;
+        ll bound = k + t + (ll)e.size() - 1 + (t - used);
 
-    while(!q.empty())
-    {
-        ll sz=q.size();
+        if (x > bound) {
+            if (used >= t)
+                return false;
 
-        if(tot-sz<k) return false;
+            used++;
 
-        cnt++;
-        if(cnt>n+2*m) return false;
+            ll half = (x + 1) / 2;
+            e.insert(half);
+            e.insert(half);
+        }
 
-        tot--;
-
-        ll x=q.top();
-        q.pop();
-
-        if(x<=tot) continue;
-
-        ll y=(x+1)/2;
-        q.push(y);
-        q.push(y);
-        tot++;
+        e.erase(prev(e.end()));
     }
 
-    return tot>=k;
+    return true;
 }
 
-int main()
-{
+int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    cin>>T;
+    ll T;
+    cin >> T;
 
-    while(T--)
-    {
-        cin>>n>>k;
+    while (T--) {
+        ll n;
+        cin >> n >> k;
 
-        for(ll i=1;i<=n;i++) cin>>a[i];
+        s.clear();
 
-        ll l=0,r=n+1,mid;
-
-        while(l<r)
-        {
-            mid=(l+r)/2;
-
-            if(check(mid)) r=mid;
-            else l=mid+1;
+        for (ll i = 0; i < n; i++) {
+            ll x;
+            cin >> x;
+            s.insert(x);
         }
 
-        cout<<n+2*l<<'\n';
+        ll lo = -1, hi = 2e5;
+
+        while (hi - lo > 1) {
+            ll mid = (lo + hi) / 2;
+
+            if (check(mid))
+                hi = mid;
+            else
+                lo = mid;
+        }
+
+        cout << n + 2 * hi << '\n';
     }
 
     return 0;
